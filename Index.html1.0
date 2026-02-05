@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Capital: Advanced Career Navigation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1400px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .game-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .game-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .game-header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .game-content {
+            padding: 30px;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .difficulty-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 700px;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        .character-select {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .character-card {
+            background: #f8f9fa;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 25px;
+            width: 280px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .character-card.selected {
+            border-color: #2c3e50;
+            background: #e8f4f8;
+        }
+
+        .character-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .character-age {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .character-situation {
+            color: #555;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .character-goal {
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .character-complexity {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #6c757d;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+
+        .character-complexity.medium {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .character-complexity.hard {
+            background: #dc3545;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Game Board */
+        .game-board {
+            display: none;
+        }
+
+        .game-board.active {
+            display: block;
+        }
+
+        .game-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .resource-tracker {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resource {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+
+        .resource-icon {
+            font-size: 1.3em;
+        }
+
+        .resource-value {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 250px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
+            height: 100%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .network-view {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .network-section {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .network-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .person-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .person-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .person-card:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .person-card.connected {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+
+        .person-card.available {
+            border-left-color: #2c3e50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .person-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .person-card.requires-action {
+            border-left-color: #ffc107;
+        }
+
+        .person-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.05em;
+        }
+
+        .person-role {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .person-value {
+            font-size: 0.85em;
+            color: #2c3e50;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .person-cost {
+            display: inline-block;
+            background: #fff3cd;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #856404;
+            margin-top: 5px;
+        }
+
+        .action-area {
+            background: #fff;
+            border: 2px solid #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 250px;
+        }
+
+        .action-prompt {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #1a252f;
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        /* Dialogue Box */
+        .dialogue-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #2c3e50;
+        }
+
+        .dialogue-speaker {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .dialogue-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .dialogue-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dialogue-option {
+            background: white;
+            border: 2px solid #2c3e50;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .dialogue-option:hover {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .dialogue-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #ccc;
+        }
+
+        .dialogue-option.disabled:hover {
+            background: white;
+            color: #333;
+        }
+
+        /* Strategic Choice */
+        .strategic-choice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .choice-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        /* Victory Screen */
+        .victory-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .victory-screen.active {
+            display: block;
+        }
+
+        .victory-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .victory-screen h2 {
+            color: #28a745;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .journey-analysis {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .analysis-section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .analysis-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .analysis-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .analysis-content {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .insight-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .insight-list li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .insight-list li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+
+        .path-visualization {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .connection-path {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .path-node {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .path-arrow {
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .key-learnings {
+            background: #e8f4f8;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .learning-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #b8daff;
+        }
+
+        .learning-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .learning-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .learning-points {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .learning-points li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .learning-points li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s, slideOut 0.3s 2.7s;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .notification.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .strategy-tip {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .tip-title {
+            font-weight: bold;
+            color: #0c5460;
+            margin-bottom: 8px;
+        }
+
+        .tip-content {
+            color: #0c5460;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>💼 Professional Capital</h1>
+            <p>Advanced Career Navigation Through Strategic Networking</p>
+        </div>
+
+        <div class="game-content">
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <h2>Navigate Your Career Transition</h2>
+                <p>In this advanced simulation, you'll experience the complex reality of professional networking. Every connection requires investment—time, energy, social capital. Some doors only open after you've built credibility. Make strategic choices about where to invest your limited resources.</p>
+                
+                <div class="difficulty-note">
+                    <strong>⚠️ Advanced Gameplay:</strong> Unlike simpler games, this simulation includes resource management, strategic choices, and multiple pathways. Not all connections lead to your goal. Some require prerequisites. You'll need to think several steps ahead.
+                </div>
+
+                <h3 style="margin: 30px 0 20px; color: #333;">Choose Your Character:</h3>
+                <div class="character-select" id="characterSelect">
+                    <div class="character-card" data-character="sarah">
+                        <h3>Sarah Chen</h3>
+                        <div class="character-age">38 years old</div>
+                        <div class="character-situation">Mid-level marketing manager at retail company. Been in same role for 6 years. Wants to transition to tech industry but has no connections there.</div>
+                        <div class="character-goal">Goal: Land product marketing role at a tech company</div>
+                        <div class="character-complexity medium">Medium Difficulty</div>
+                    </div>
+                    <div class="character-card" data-character="james">
+                        <h3>James Rodriguez</h3>
+                        <div class="character-age">45 years old</div>
+                        <div class="character-situation">Former construction worker, recently injured. Can't do physical labor anymore. Has leadership skills but no formal credentials. Needs career pivot.</div>
+                        <div class="character-goal">Goal: Secure project management certification + job in office environment</div>
+                        <div class="character-complexity hard">Hard Difficulty</div>
+                    </div>
+                    <div class="character-card" data-character="priya">
+                        <h3>Dr. Priya Patel</h3>
+                        <div class="character-age">42 years old</div>
+                        <div class="character-situation">PhD in biology, spent 15 years in research. Burned out. Wants to pivot to science policy or biotech industry but feels "trapped" in academia.</div>
+                        <div class="character-goal">Goal: Exit academia and enter biotech or policy work</div>
+                        <div class="character-complexity medium">Medium Difficulty</div>
+                    </div>
+                    <div class="character-card" data-character="marcus">
+                        <h3>Marcus Johnson</h3>
+                        <div class="character-age">52 years old</div>
+                        <div class="character-situation">20 years in middle management at manufacturing company. Just got laid off. Needs to break into completely new industry before retirement.</div>
+                        <div class="character-goal">Goal: Secure consulting role leveraging operations experience</div>
+                        <div class="character-complexity hard">Hard Difficulty</div>
+                    </div>
+                </div>
+                
+                <button class="btn" id="startBtn" disabled>Begin Career Journey</button>
+            </div>
+
+            <!-- Game Board -->
+            <div class="game-board" id="gameBoard">
+                <div class="game-info">
+                    <div class="info-item">
+                        <div class="info-label">Character:</div>
+                        <div class="info-value" id="characterName">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Goal:</div>
+                        <div class="info-value" id="characterGoal">-</div>
+                    </div>
+                    <div class="resource-tracker" id="resourceTracker">
+                        <!-- Resources will be added here -->
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Progress:</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressBar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="strategyTip"></div>
+
+                <div class="network-view">
+                    <div class="network-section">
+                        <h3><span>👨‍👩‍👧‍👦</span> Your Inner Circle</h3>
+                        <div class="person-list" id="bondingList"></div>
+                    </div>
+                    <div class="network-section">
+                        <h3><span>🔗</span> Professional Acquaintances</h3>
+                        <div class="person-list" id="acquaintanceList"></div>
+                    </div>
+                    <div class="network-section">
+                        <h3><span>🌉</span> Strategic Bridges</h3>
+                        <div class="person-list" id="bridgingList"></div>
+                    </div>
+                </div>
+
+                <div class="action-area" id="actionArea">
+                    <div class="action-prompt" id="actionPrompt">
+                        Select someone from your network to interact with them. Consider your resources and the strategic path to your goal.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Victory Screen -->
+            <div class="victory-screen" id="victoryScreen">
+                <div class="victory-icon">🎯</div>
+                <h2>Goal Achieved!</h2>
+                <p style="font-size: 1.3em; color: #666; margin-bottom: 30px;" id="victoryMessage"></p>
+
+                <div class="path-visualization" id="pathVisualization">
+                    <h3 style="color: #333; margin-bottom: 15px;">Your Strategic Path:</h3>
+                    <div class="connection-path" id="connectionPath"></div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalConnections">0</div>
+                        <div class="stat-label">Connections Made</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="timeInvested">0</div>
+                        <div class="stat-label">Months Invested</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="pathEfficiency">0</div>
+                        <div class="stat-label">Path Efficiency</div>
+                    </div>
+                </div>
+
+                <div class="journey-analysis">
+                    <h3 style="text-align: center; color: #333; margin-bottom: 25px;">📊 Your Journey Analysis</h3>
+                    
+                    <div class="analysis-section">
+                        <div class="analysis-title">What Worked in Your Strategy</div>
+                        <div class="analysis-content" id="whatWorked"></div>
+                    </div>
+
+                    <div class="analysis-section">
+                        <div class="analysis-title">Key Insights for Real Life</div>
+                        <ul class="insight-list" id="keyInsights"></ul>
+                    </div>
+                </div>
+
+                <div class="key-learnings">
+                    <h3 style="text-align: center; color: #333; margin-bottom: 25px;">🎓 Professional Networking Principles</h3>
+                    
+                    <div class="learning-item">
+                        <div class="learning-title">1. Weak Ties Give You Access to Different "Rooms"</div>
+                        <ul class="learning-points">
+                            <li>Your close friends and family provide support, but they operate in the same world you do</li>
+                            <li>Acquaintances and weak ties have access to completely different networks and opportunities</li>
+                            <li>Career transitions require building bridges to NEW rooms, not just strengthening old connections</li>
+                        </ul>
+                    </div>
+
+                    <div class="learning-item">
+                        <div class="learning-title">2. Strategic Networking Requires Investment & Planning</div>
+                        <ul class="learning-points">
+                            <li>Every connection requires time, energy, and sometimes money (courses, events, coffees)</li>
+                            <li>You can't network with everyone—you must be strategic about where to invest</li>
+                            <li>Some doors only open after you've built credibility through other connections first</li>
+                        </ul>
+                    </div>
+
+                    <div class="learning-item">
+                        <div class="learning-title">3. Career Transitions Follow Patterns You Can Learn</div>
+                        <ul class="learning-points">
+                            <li>Most successful transitions involve 3-5 key bridge connections, not 50</li>
+                            <li>Informational interviews and skill-building create credibility for later asks</li>
+                            <li>The path is rarely direct—you often need to build bridges in sequence</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="location.reload()">Try Different Character</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        const gameState = {
+            selectedCharacter: null,
+            connections: [],
+            currentPath: [],
+            resources: {
+                time: 12, // months
+                energy: 10, // interaction points
+                credibility: 0 // earned through actions
+            },
+            actionsCompleted: [],
+            progress: 0,
+            totalInteractions: 0
+        };
+
+        // Character Data with complex networking paths
+        const characters = {
+            sarah: {
+                name: "Sarah Chen",
+                goal: "Tech Product Marketing Role",
+                startingResources: { time: 12, energy: 10, credibility: 0 },
+                
+                bonding: [
+                    { 
+                        id: "spouse", 
+                        name: "David (Spouse)", 
+                        role: "Teacher at local high school", 
+                        value: "Emotional support and encouragement",
+                        cost: { time: 0, energy: 0 },
+                        intro: "David is supportive but worried about the financial risk of a career change. He encourages you to be strategic.",
+                        unlocked: true
+                    },
+                    { 
+                        id: "college-friend", 
+                        name: "Jessica Lee", 
+                        role: "Former college roommate, now stay-at-home parent", 
+                        value: "Moral support, knows people from college days",
+                        cost: { time: 1, energy: 1 },
+                        intro: "Jessica is excited to reconnect. She mentions her brother works in tech but you've never met him.",
+                        unlocked: true,
+                        opens: ["jessica-brother"]
+                    },
+                    { 
+                        id: "current-boss", 
+                        name: "Tom Williams", 
+                        role: "Your current boss in retail marketing", 
+                        value: "Can provide reference, but limited tech connections",
+                        cost: { time: 1, energy: 2 },
+                        intro: "Tom is surprised but supportive. He offers to be a reference but admits he doesn't know anyone in tech.",
+                        unlocked: true
+                    }
+                ],
+
+                acquaintances: [
+                    { 
+                        id: "jessica-brother", 
+                        name: "Michael Lee", 
+                        role: "Software engineer at mid-size tech company", 
+                        value: "Can explain tech culture, introduce to PM",
+                        cost: { time: 2, energy: 2 },
+                        requires: ["college-friend"],
+                        intro: "Michael agrees to coffee. He explains how different tech is from retail and suggests you talk to a product manager to understand the role better.",
+                        unlocked: false,
+                        opens: ["product-manager"]
+                    },
+                    { 
+                        id: "linkedin-connection", 
+                        name: "Amanda Torres", 
+                        role: "Connected on LinkedIn 2 years ago, works in marketing analytics", 
+                        value: "Warm introduction, different industry perspective",
+                        cost: { time: 1, energy: 2 },
+                        intro: "Amanda remembers you! She's now at a SaaS company and says they're always looking for marketers who understand data.",
+                        unlocked: true,
+                        credibilityGain: 1
+                    },
+                    { 
+                        id: "former-colleague", 
+                        name: "Ryan Park", 
+                        role: "Former colleague who left retail for tech 3 years ago", 
+                        value: "Has made the transition you want to make",
+                        cost: { time: 2, energy: 2 },
+                        intro: "Ryan shares his transition story. He took a course in product management and networked like crazy. He offers to introduce you to his network IF you complete a course first.",
+                        unlocked: true,
+                        requiresAction: "take-course"
+                    }
+                ],
+
+                bridging: [
+                    { 
+                        id: "product-manager", 
+                        name: "Sarah Nguyen", 
+                        role: "Senior Product Manager at tech startup", 
+                        value: "Informational interview about PM role",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["jessica-brother"],
+                        intro: "Sarah gives you the real talk about product marketing in tech. She suggests you build a portfolio case study and attend the upcoming ProductCon conference.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opensAction: "build-portfolio"
+                    },
+                    { 
+                        id: "course-instructor", 
+                        name: "Professor Janet Kim", 
+                        role: "Teaches Product Marketing certification course", 
+                        value: "Credential + access to alumni network",
+                        cost: { time: 3, energy: 2 },
+                        requiresAction: "take-course",
+                        intro: "The course is intense but valuable. Professor Kim is impressed with your retail experience and introduces you to several alumni in tech.",
+                        unlocked: false,
+                        credibilityGain: 3,
+                        opens: ["alumni-network"]
+                    },
+                    { 
+                        id: "alumni-network", 
+                        name: "Tech Product Marketers Alumni Group", 
+                        role: "Group of 50+ product marketers from the course", 
+                        value: "Job leads, referrals, ongoing support",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["course-instructor"],
+                        intro: "The alumni Slack channel is active. You see job postings, connect with people at target companies, and get referrals.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opens: ["hiring-manager"]
+                    },
+                    { 
+                        id: "hiring-manager", 
+                        name: "Alex Chen", 
+                        role: "Hiring manager at fast-growing tech company", 
+                        value: "Final interview for product marketing role",
+                        cost: { time: 1, energy: 4 },
+                        requires: ["alumni-network"],
+                        requiresCredibility: 6,
+                        intro: "Alex was impressed by your referral and portfolio. After several rounds of interviews, you get the offer!",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    },
+                    { 
+                        id: "recruiter", 
+                        name: "Tech Recruiting Agency", 
+                        role: "Specializes in marketing to tech transitions", 
+                        value: "Can submit you to multiple companies",
+                        cost: { time: 1, energy: 2 },
+                        requiresCredibility: 4,
+                        intro: "The recruiter reviews your background. With your new certification and portfolio, they can submit you to several roles.",
+                        unlocked: true,
+                        opens: ["hiring-manager"]
+                    }
+                ],
+
+                actions: {
+                    "take-course": {
+                        name: "Enroll in Product Marketing Course",
+                        cost: { time: 3, energy: 0 },
+                        credibilityGain: 3,
+                        description: "Invest in formal education to build credibility and skills"
+                    },
+                    "build-portfolio": {
+                        name: "Create Product Marketing Portfolio",
+                        cost: { time: 2, energy: 2 },
+                        credibilityGain: 2,
+                        description: "Build case studies showing your marketing thinking"
+                    },
+                    "attend-conference": {
+                        name: "Attend ProductCon Conference",
+                        cost: { time: 1, energy: 3 },
+                        credibilityGain: 1,
+                        description: "Network with product marketers and learn industry trends"
+                    }
+                },
+
+                winPaths: [
+                    ["college-friend", "jessica-brother", "product-manager", "course-instructor", "alumni-network", "hiring-manager"],
+                    ["former-colleague", "take-course", "course-instructor", "alumni-network", "hiring-manager"],
+                    ["linkedin-connection", "build-portfolio", "recruiter", "hiring-manager"]
+                ],
+                
+                winMessage: "You successfully transitioned into tech product marketing! Your strategic networking and credential-building paid off."
+            },
+
+            james: {
+                name: "James Rodriguez",
+                goal: "Project Management Certification + Office Job",
+                startingResources: { time: 10, energy: 8, credibility: 0 },
+                
+                bonding: [
+                    { 
+                        id: "wife", 
+                        name: "Maria (Wife)", 
+                        role: "Nurse at local hospital", 
+                        value: "Financial and emotional support during transition",
+                        cost: { time: 0, energy: 0 },
+                        intro: "Maria is scared but trusts you. She's working extra shifts to support the family while you retrain.",
+                        unlocked: true
+                    },
+                    { 
+                        id: "former-crew", 
+                        name: "Construction Crew Members", 
+                        role: "Friends from 20 years in construction", 
+                        value: "Support but no office job connections",
+                        cost: { time: 1, energy: 1 },
+                        intro: "The guys wish you well but none of them know anything about office work. One mentions his cousin works for the city.",
+                        unlocked: true,
+                        opens: ["city-worker"]
+                    },
+                    { 
+                        id: "church", 
+                        name: "Pastor Miguel", 
+                        role: "Community pastor who knows everyone", 
+                        value: "Can connect you to community resources",
+                        cost: { time: 1, energy: 1 },
+                        intro: "Pastor Miguel knows about a workforce development program. He offers to introduce you to the director.",
+                        unlocked: true,
+                        opens: ["workforce-program"]
+                    }
+                ],
+
+                acquaintances: [
+                    { 
+                        id: "city-worker", 
+                        name: "Carlos Mendez", 
+                        role: "Works in city's public works department", 
+                        value: "Knows about city job opportunities",
+                        cost: { time: 2, energy: 2 },
+                        requires: ["former-crew"],
+                        intro: "Carlos explains how city hiring works. Your construction experience could translate to facilities management, but you need baseline office skills first.",
+                        unlocked: false,
+                        credibilityGain: 1
+                    },
+                    { 
+                        id: "workforce-program", 
+                        name: "Lisa Chen, Workforce Development Director", 
+                        role: "Runs free job training program", 
+                        value: "Free PM certification, resume help, job connections",
+                        cost: { time: 4, energy: 2 },
+                        requires: ["church"],
+                        intro: "Lisa enrolls you in their Project Management program. It's free but requires 4 months of commitment. You'll also get help with resume and LinkedIn.",
+                        unlocked: false,
+                        credibilityGain: 4,
+                        opensAction: "complete-certification",
+                        opens: ["career-counselor"]
+                    },
+                    { 
+                        id: "injury-lawyer", 
+                        name: "Attorney from Workers Comp Case", 
+                        role: "Handled your injury claim", 
+                        value: "Professional contact, might know people",
+                        cost: { time: 1, energy: 2 },
+                        intro: "Your attorney is impressed by your determination to reinvent yourself. She knows someone at a construction management firm.",
+                        unlocked: true,
+                        opens: ["construction-firm"]
+                    }
+                ],
+
+                bridging: [
+                    { 
+                        id: "career-counselor", 
+                        name: "James Park, Career Counselor", 
+                        role: "Helps with job search strategy", 
+                        value: "Resume polish, interview prep, job leads",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["workforce-program"],
+                        requiresCredibility: 4,
+                        intro: "James helps you translate construction leadership into project management language. He connects you with employers who value non-traditional candidates.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opens: ["employer-network"]
+                    },
+                    { 
+                        id: "construction-firm", 
+                        name: "Thompson Construction Management", 
+                        role: "Large firm that does office-based project management", 
+                        value: "Bridge between construction and office work",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["injury-lawyer"],
+                        requiresCredibility: 3,
+                        intro: "They value your 20 years of field experience. With your new PM cert, they're willing to give you a junior PM role.",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    },
+                    { 
+                        id: "employer-network", 
+                        name: "Workforce Program Partner Employers", 
+                        role: "Companies that hire program graduates", 
+                        value: "Multiple job opportunities",
+                        cost: { time: 2, energy: 4 },
+                        requires: ["career-counselor"],
+                        requiresCredibility: 5,
+                        intro: "Several companies interview workforce program grads. Your construction background is actually an asset—you understand how projects really work.",
+                        unlocked: false,
+                        opens: ["operations-manager"]
+                    },
+                    { 
+                        id: "operations-manager", 
+                        name: "Sarah Kim, Operations Manager", 
+                        role: "Hiring for junior PM at logistics company", 
+                        value: "Job interview and offer",
+                        cost: { time: 1, energy: 4 },
+                        requires: ["employer-network"],
+                        requiresCredibility: 6,
+                        intro: "Sarah is impressed by your real-world project experience. The certification shows you're serious. Job offer extended!",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    }
+                ],
+
+                actions: {
+                    "complete-certification": {
+                        name: "Complete PM Certification Program",
+                        cost: { time: 4, energy: 0 },
+                        credibilityGain: 4,
+                        description: "4-month intensive program with credential and job connections"
+                    },
+                    "volunteer-pm": {
+                        name: "Volunteer to PM Church Renovation",
+                        cost: { time: 2, energy: 2 },
+                        credibilityGain: 2,
+                        description: "Build portfolio with real PM experience"
+                    }
+                },
+
+                winPaths: [
+                    ["church", "workforce-program", "career-counselor", "employer-network", "operations-manager"],
+                    ["injury-lawyer", "construction-firm"],
+                    ["church", "workforce-program", "complete-certification", "construction-firm"]
+                ],
+                
+                winMessage: "You successfully transitioned from construction to project management! Your experience was an asset, not a liability."
+            },
+
+            priya: {
+                name: "Dr. Priya Patel",
+                goal: "Exit Academia → Biotech/Policy",
+                startingResources: { time: 12, energy: 10, credibility: 5 }, // PhD gives starting credibility
+                
+                bonding: [
+                    { 
+                        id: "partner", 
+                        name: "Raj (Partner)", 
+                        role: "Software engineer", 
+                        value: "Financial stability during transition",
+                        cost: { time: 0, energy: 0 },
+                        intro: "Raj supports your decision to leave academia. He works in tech and can introduce you to his network if you want to explore biotech startups.",
+                        unlocked: true,
+                        opens: ["tech-network"]
+                    },
+                    { 
+                        id: "phd-advisor", 
+                        name: "Professor Morrison", 
+                        role: "Your doctoral advisor", 
+                        value: "Academic network but limited industry connections",
+                        cost: { time: 1, energy: 2 },
+                        intro: "Professor Morrison is disappointed but professional. She mentions a former student who went into science policy.",
+                        unlocked: true,
+                        opens: ["former-student"]
+                    },
+                    { 
+                        id: "lab-colleagues", 
+                        name: "Current Lab Members", 
+                        role: "Fellow researchers", 
+                        value: "Moral support, some exploring industry too",
+                        cost: { time: 1, energy: 1 },
+                        intro: "Your colleagues are envious—they also feel stuck. One is applying to biotech and shares a recruiter contact.",
+                        unlocked: true,
+                        opens: ["biotech-recruiter"]
+                    }
+                ],
+
+                acquaintances: [
+                    { 
+                        id: "former-student", 
+                        name: "Dr. James Liu", 
+                        role: "Now works for FDA in science policy", 
+                        value: "Insight into government science careers",
+                        cost: { time: 2, energy: 2 },
+                        requires: ["phd-advisor"],
+                        intro: "James loved academia but needed better work-life balance. He explains the federal science policy pathway and suggests AAAS fellowship.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opensAction: "apply-fellowship"
+                    },
+                    { 
+                        id: "tech-network", 
+                        name: "Raj's Tech Colleagues", 
+                        role: "Software engineers who know biotech people", 
+                        value: "Introduction to biotech startup world",
+                        cost: { time: 2, energy: 2 },
+                        requires: ["partner"],
+                        intro: "At a party, you meet several people in tech. One works at a computational biology startup and is excited about your research background.",
+                        unlocked: false,
+                        opens: ["startup-scientist"]
+                    },
+                    { 
+                        id: "biotech-recruiter", 
+                        name: "Executive Recruiter (Biotech)", 
+                        role: "Places PhDs in industry", 
+                        value: "Multiple company connections",
+                        cost: { time: 1, energy: 2 },
+                        requires: ["lab-colleagues"],
+                        intro: "The recruiter is honest: your research is impressive but you need to reframe your narrative for industry. Suggests updating LinkedIn and building industry vocabulary.",
+                        unlocked: false,
+                        credibilityGain: 1,
+                        opensAction: "rebrand-linkedin"
+                    },
+                    { 
+                        id: "conference-contact", 
+                        name: "Industry Scientist at Conference", 
+                        role: "Met at academic conference 2 years ago", 
+                        value: "Direct line to hiring manager",
+                        cost: { time: 2, energy: 3 },
+                        intro: "You reconnect on LinkedIn. She remembers your research and mentions her company is hiring. Interested in candidates who can bridge research and product.",
+                        unlocked: true,
+                        requiresCredibility: 3,
+                        opens: ["biotech-director"]
+                    }
+                ],
+
+                bridging: [
+                    { 
+                        id: "startup-scientist", 
+                        name: "Dr. Emma Zhang, Computational Biologist", 
+                        role: "Works at AI-driven drug discovery startup", 
+                        value: "Informational interview + startup insights",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["tech-network"],
+                        intro: "Emma explains how different startup culture is from academia. Faster pace, more emphasis on product. She offers to introduce you to her CSO if you're serious.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opens: ["startup-cso"]
+                    },
+                    { 
+                        id: "startup-cso", 
+                        name: "Dr. Michael Rodriguez, Chief Scientific Officer", 
+                        role: "Hiring research scientists at startup", 
+                        value: "Job interview opportunity",
+                        cost: { time: 2, energy: 4 },
+                        requires: ["startup-scientist"],
+                        requiresCredibility: 6,
+                        intro: "Michael is impressed by your research pedigree. The startup is risky but exciting. After several conversations, you get an offer.",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    },
+                    { 
+                        id: "biotech-director", 
+                        name: "Dr. Sarah Kim, R&D Director", 
+                        role: "Hiring at established biotech company", 
+                        value: "More stable biotech opportunity",
+                        cost: { time: 2, energy: 4 },
+                        requires: ["conference-contact"],
+                        requiresCredibility: 5,
+                        intro: "Sarah's team needs someone who can design studies and communicate with regulatory. Your academic rigor is an asset here.",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    },
+                    { 
+                        id: "aaas-fellowship", 
+                        name: "AAAS Science Policy Fellowship", 
+                        role: "1-year fellowship in federal science policy", 
+                        value: "Gateway to policy career",
+                        cost: { time: 3, energy: 4 },
+                        requiresAction: "apply-fellowship",
+                        requiresCredibility: 7,
+                        intro: "The fellowship is competitive but you get it! You'll spend a year at NIH working on policy. Great exit from academia.",
+                        unlocked: false,
+                        opportunity: "fellowship"
+                    }
+                ],
+
+                actions: {
+                    "apply-fellowship": {
+                        name: "Apply for AAAS Science Policy Fellowship",
+                        cost: { time: 3, energy: 3 },
+                        credibilityGain: 2,
+                        description: "Competitive fellowship for scientists entering policy"
+                    },
+                    "rebrand-linkedin": {
+                        name: "Rebrand LinkedIn for Industry",
+                        cost: { time: 1, energy: 2 },
+                        credibilityGain: 2,
+                        description: "Reframe your narrative from academic to industry language"
+                    },
+                    "attend-industry-conference": {
+                        name: "Attend Biotech Industry Conference",
+                        cost: { time: 1, energy: 3 },
+                        credibilityGain: 1,
+                        description: "Network with industry scientists and learn industry trends"
+                    }
+                },
+
+                winPaths: [
+                    ["partner", "tech-network", "startup-scientist", "startup-cso"],
+                    ["conference-contact", "biotech-director"],
+                    ["phd-advisor", "former-student", "apply-fellowship", "aaas-fellowship"],
+                    ["lab-colleagues", "biotech-recruiter", "rebrand-linkedin", "biotech-director"]
+                ],
+                
+                winMessage: "You successfully exited academia! Your PhD was valuable—you just needed to find the right room."
+            },
+
+            marcus: {
+                name: "Marcus Johnson",
+                goal: "Operations Consulting Role",
+                startingResources: { time: 10, energy: 9, credibility: 3 }, // Experience gives some credibility
+                
+                bonding: [
+                    { 
+                        id: "spouse", 
+                        name: "Linda (Spouse)", 
+                        role: "Accountant", 
+                        value: "Financial planning and support",
+                        cost: { time: 0, energy: 0 },
+                        intro: "Linda is worried about finances but trusts your judgment. She knows a few people in professional services through her work.",
+                        unlocked: true,
+                        opens: ["accounting-network"]
+                    },
+                    { 
+                        id: "former-colleagues", 
+                        name: "Manufacturing Colleagues", 
+                        role: "20 years of professional relationships", 
+                        value: "References and support",
+                        cost: { time: 1, energy: 1 },
+                        intro: "Your former colleagues are shocked by the layoff. Several offer to be references. One is now at a consulting firm.",
+                        unlocked: true,
+                        opens: ["consulting-insider"]
+                    },
+                    { 
+                        id: "college-alumni", 
+                        name: "University Alumni Network", 
+                        role: "Engineering degree from 30 years ago", 
+                        value: "Reconnect with successful alumni",
+                        cost: { time: 2, energy: 2 },
+                        intro: "You haven't engaged with alumni in decades. You reach out and find several classmates in consulting and leadership roles.",
+                        unlocked: true,
+                        credibilityGain: 1,
+                        opens: ["alumni-consulting"]
+                    }
+                ],
+
+                acquaintances: [
+                    { 
+                        id: "accounting-network", 
+                        name: "Professional Services Contacts", 
+                        role: "People Linda knows through work", 
+                        value: "Introduction to consulting world",
+                        cost: { time: 2, energy: 2 },
+                        requires: ["spouse"],
+                        intro: "Linda's colleague knows someone at a boutique operations consulting firm. They hire experienced industry professionals.",
+                        unlocked: false,
+                        opens: ["boutique-firm"]
+                    },
+                    { 
+                        id: "consulting-insider", 
+                        name: "David Park", 
+                        role: "Former colleague, now at Big 4 consulting", 
+                        value: "Insider view of consulting career",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["former-colleagues"],
+                        intro: "David made the jump 5 years ago. He's candid: at 52, you won't get hired through normal recruiting. You need a differentiated value prop and network entry.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opensAction: "build-thought-leadership"
+                    },
+                    { 
+                        id: "alumni-consulting", 
+                        name: "Alumni in Consulting", 
+                        role: "Several former classmates at various firms", 
+                        value: "Multiple potential pathways",
+                        cost: { time: 3, energy: 3 },
+                        requires: ["college-alumni"],
+                        intro: "You reconnect with 3 alumni. One is a partner at a mid-size firm and willing to meet if you can demonstrate relevant expertise.",
+                        unlocked: false,
+                        credibilityGain: 2,
+                        opens: ["consulting-partner"]
+                    },
+                    { 
+                        id: "outplacement", 
+                        name: "Outplacement Career Coach", 
+                        role: "Provided by former employer", 
+                        value: "Resume help and strategy",
+                        cost: { time: 2, energy: 2 },
+                        intro: "The coach helps you reframe 20 years of experience into consulting value props. Suggests building visibility through LinkedIn thought leadership.",
+                        unlocked: true,
+                        credibilityGain: 1,
+                        opensAction: "build-thought-leadership"
+                    }
+                ],
+
+                bridging: [
+                    { 
+                        id: "boutique-firm", 
+                        name: "Regional Operations Consulting Firm", 
+                        role: "Smaller firm that values industry experience", 
+                        value: "Potential consulting role",
+                        cost: { time: 2, energy: 4 },
+                        requires: ["accounting-network"],
+                        requiresCredibility: 5,
+                        intro: "The firm is interested. They need someone who understands manufacturing operations. After interviews, you get an offer as senior consultant.",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    },
+                    { 
+                        id: "consulting-partner", 
+                        name: "Jennifer Wu, Consulting Partner", 
+                        role: "Partner at mid-size consulting firm", 
+                        value: "High-level connection, potential role",
+                        cost: { time: 3, energy: 4 },
+                        requires: ["alumni-consulting"],
+                        requiresCredibility: 7,
+                        intro: "Jennifer is impressed by your thought leadership and deep operations expertise. She brings you in as an experienced hire—unusual but you're worth it.",
+                        unlocked: false,
+                        opportunity: "job-offer"
+                    },
+                    { 
+                        id: "former-client", 
+                        name: "Executive at Former Client Company", 
+                        role: "Someone who valued your work years ago", 
+                        value: "Direct path to consulting work",
+                        cost: { time: 2, energy: 3 },
+                        requiresCredibility: 4,
+                        intro: "You reach out to a former client who always appreciated your work. They're now a VP and looking for someone to help with operations transformation. Independent consulting opportunity!",
+                        unlocked: true,
+                        opportunity: "consulting-contract"
+                    },
+                    { 
+                        id: "industry-association", 
+                        name: "Manufacturing Leadership Council", 
+                        role: "Professional association for ops leaders", 
+                        value: "Networking and visibility",
+                        cost: { time: 2, energy: 3 },
+                        intro: "You start attending events and speaking on panels. Other members are consultants or hiring consultants. You build credibility.",
+                        unlocked: true,
+                        credibilityGain: 3,
+                        opens: ["consulting-network"]
+                    },
+                    { 
+                        id: "consulting-network", 
+                        name: "Network of Independent Consultants", 
+                        role: "Solo practitioners who collaborate", 
+                        value: "Path to independent consulting",
+                        cost: { time: 2, energy: 3 },
+                        requires: ["industry-association"],
+                        requiresCredibility: 6,
+                        intro: "Other consultants see you as a peer. They start referring projects to you. You're building an independent practice.",
+                        unlocked: false,
+                        opportunity: "independent-practice"
+                    }
+                ],
+
+                actions: {
+                    "build-thought-leadership": {
+                        name: "Write LinkedIn Articles on Operations",
+                        cost: { time: 2, energy: 3 },
+                        credibilityGain: 3,
+                        description: "Build visibility as an operations expert"
+                    },
+                    "get-certification": {
+                        name: "Get Lean Six Sigma Certification",
+                        cost: { time: 3, energy: 2 },
+                        credibilityGain: 2,
+                        description: "Formalize your operations expertise with credential"
+                    },
+                    "speak-at-conference": {
+                        name: "Speak at Industry Conference",
+                        cost: { time: 2, energy: 4 },
+                        credibilityGain: 3,
+                        description: "Build reputation as thought leader"
+                    }
+                },
+
+                winPaths: [
+                    ["spouse", "accounting-network", "boutique-firm"],
+                    ["college-alumni", "alumni-consulting", "build-thought-leadership", "consulting-partner"],
+                    ["former-client"],
+                    ["industry-association", "build-thought-leadership", "consulting-network"]
+                ],
+                
+                winMessage: "You successfully transitioned to consulting! Your experience was your competitive advantage."
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupCharacterSelection();
+        });
+
+        function setupCharacterSelection() {
+            const cards = document.querySelectorAll('.character-card');
+            const startBtn = document.getElementById('startBtn');
+
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    cards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    gameState.selectedCharacter = this.dataset.character;
+                    startBtn.disabled = false;
+                });
+            });
+
+            startBtn.addEventListener('click', startGame);
+        }
+
+        function startGame() {
+            const character = characters[gameState.selectedCharacter];
+            gameState.resources = { ...character.startingResources };
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameBoard').classList.add('active');
+            
+            document.getElementById('characterName').textContent = character.name;
+            document.getElementById('characterGoal').textContent = character.goal;
+            
+            updateResources();
+            renderNetwork();
+            showStrategyTip();
+        }
+
+        function updateResources() {
+            const resourceTracker = document.getElementById('resourceTracker');
+            resourceTracker.innerHTML = `
+                <div class="resource">
+                    <div class="resource-icon">⏰</div>
+                    <div class="resource-value">${gameState.resources.time} months</div>
+                </div>
+                <div class="resource">
+                    <div class="resource-icon">⚡</div>
+                    <div class="resource-value">${gameState.resources.energy} energy</div>
+                </div>
+                <div class="resource">
+                    <div class="resource-icon">⭐</div>
+                    <div class="resource-value">${gameState.resources.credibility} credibility</div>
+                </div>
+            `;
+        }
+
+        function showStrategyTip() {
+            const tips = [
+                "Start with your inner circle—they can open doors to acquaintances.",
+                "Build credibility before approaching high-value connections.",
+                "Not every connection leads to your goal—think strategically.",
+                "Some doors require prerequisites—complete actions to unlock them.",
+                "Watch your time and energy—you can't network with everyone."
+            ];
+            const tip = tips[Math.floor(Math.random() * tips.length)];
+            
+            document.getElementById('strategyTip').innerHTML = `
+                <div class="strategy-tip">
+                    <div class="tip-title">💡 Strategy Tip</div>
+                    <div class="tip-content">${tip}</div>
+                </div>
+            `;
+        }
+
+        function renderNetwork() {
+            const character = characters[gameState.selectedCharacter];
+            const bondingList = document.getElementById('bondingList');
+            const acquaintanceList = document.getElementById('acquaintanceList');
+            const bridgingList = document.getElementById('bridgingList');
+            
+            bondingList.innerHTML = '';
+            acquaintanceList.innerHTML = '';
+            bridgingList.innerHTML = '';
+
+            // Render bonding capital
+            character.bonding.forEach(person => {
+                const card = createPersonCard(person, 'bonding');
+                bondingList.appendChild(card);
+            });
+
+            // Render acquaintances
+            character.acquaintances.forEach(person => {
+                const card = createPersonCard(person, 'acquaintance');
+                acquaintanceList.appendChild(card);
+            });
+
+            // Render bridging capital
+            character.bridging.forEach(person => {
+                const card = createPersonCard(person, 'bridging');
+                bridgingList.appendChild(card);
+            });
+        }
+
+        function createPersonCard(person, type) {
+            const card = document.createElement('div');
+            card.className = 'person-card';
+            
+            const isConnected = gameState.connections.includes(person.id);
+            const meetsRequirements = checkRequirements(person);
+            const isAvailable = person.unlocked || meetsRequirements;
+            const isLocked = !isAvailable;
+
+            if (isConnected) {
+                card.classList.add('connected');
+            } else if (isAvailable && !isConnected) {
+                card.classList.add('available');
+            } else {
+                card.classList.add('locked');
+            }
+
+            if (person.requiresAction && !gameState.actionsCompleted.includes(person.requiresAction)) {
+                card.classList.add('requires-action');
+            }
+
+            let costDisplay = '';
+            if (person.cost && !isConnected) {
+                const costs = [];
+                if (person.cost.time) costs.push(`${person.cost.time} months`);
+                if (person.cost.energy) costs.push(`${person.cost.energy} energy`);
+                if (costs.length > 0) {
+                    costDisplay = `<div class="person-cost">Cost: ${costs.join(', ')}</div>`;
+                }
+            }
+
+            card.innerHTML = `
+                <div class="person-name">${person.name}</div>
+                <div class="person-role">${person.role}</div>
+                <div class="person-value">${person.value}</div>
+                ${costDisplay}
+            `;
+
+            if (!isLocked && !isConnected) {
+                card.addEventListener('click', () => interactWithPerson(person, type));
+            }
+
+            return card;
+        }
+
+        function checkRequirements(person) {
+            if (person.requires && person.requires.length > 0) {
+                return person.requires.every(req => gameState.connections.includes(req));
+            }
+            if (person.requiresCredibility) {
+                return gameState.resources.credibility >= person.requiresCredibility;
+            }
+            if (person.requiresAction) {
+                return gameState.actionsCompleted.includes(person.requiresAction);
+            }
+            return true;
+        }
+
+        function interactWithPerson(person, type) {
+            if (gameState.connections.includes(person.id)) {
+                return;
+            }
+
+            // Check if player has resources
+            if (person.cost) {
+                if (person.cost.time > gameState.resources.time) {
+                    showNotification('Not enough time remaining!', 'warning');
+                    return;
+                }
+                if (person.cost.energy > gameState.resources.energy) {
+                    showNotification('Not enough energy!', 'warning');
+                    return;
+                }
+            }
+
+            const actionArea = document.getElementById('actionArea');
+            
+            let options = `<div class="dialogue-option" onclick="makeConnection('${person.id}', '${type}', ${person.opportunity ? `'${person.opportunity}'` : 'null'}, ${JSON.stringify(person.cost || {}).replace(/"/g, '&quot;')}, ${person.credibilityGain || 0}, ${person.opens ? JSON.stringify(person.opens).replace(/"/g, '&quot;') : 'null'}, '${person.opensAction || ''}')">
+                💬 Connect with ${person.name}
+            </div>`;
+
+            if (person.requiresAction && !gameState.actionsCompleted.includes(person.requiresAction)) {
+                const character = characters[gameState.selectedCharacter];
+                const action = character.actions[person.requiresAction];
+                if (action) {
+                    options = `
+                        <div class="strategic-choice">
+                            <div class="choice-title">⚠️ This connection requires completing an action first:</div>
+                            <p><strong>${action.name}</strong>: ${action.description}</p>
+                            <p>Cost: ${action.cost.time} months, ${action.cost.energy} energy | Gain: ${action.credibilityGain} credibility</p>
+                        </div>
+                        <div class="dialogue-option" onclick="completeAction('${person.requiresAction}')">
+                            ✅ Complete: ${action.name}
+                        </div>
+                        <div class="dialogue-option secondary" onclick="renderNetwork(); document.getElementById('actionArea').innerHTML = '<div class=&quot;action-prompt&quot;>Select someone from your network to interact with them.</div>'">
+                            ← Go Back
+                        </div>
+                    `;
+                }
+            }
+
+            actionArea.innerHTML = `
+                <div class="dialogue-box">
+                    <div class="dialogue-speaker">${person.name}</div>
+                    <div class="dialogue-text">${person.intro}</div>
+                    <div class="dialogue-options">
+                        ${options}
+                    </div>
+                </div>
+            `;
+        }
+
+        function completeAction(actionId) {
+            const character = characters[gameState.selectedCharacter];
+            const action = character.actions[actionId];
+
+            if (!action) return;
+
+            // Check resources
+            if (action.cost.time > gameState.resources.time) {
+                showNotification('Not enough time!', 'warning');
+                return;
+            }
+            if (action.cost.energy > gameState.resources.energy) {
+                showNotification('Not enough energy!', 'warning');
+                return;
+            }
+
+            // Deduct resources
+            gameState.resources.time -= action.cost.time;
+            gameState.resources.energy -= action.cost.energy;
+            gameState.resources.credibility += action.credibilityGain;
+            
+            gameState.actionsCompleted.push(actionId);
+            
+            updateResources();
+            updateProgress();
+            renderNetwork();
+            
+            showNotification(`Completed: ${action.name}! +${action.credibilityGain} credibility`, 'success');
+
+            document.getElementById('actionArea').innerHTML = `
+                <div class="action-prompt">
+                    Great! You've completed <strong>${action.name}</strong>. This has built your credibility and may unlock new connections. Check who's now available!
+                </div>
+            `;
+        }
+
+        function makeConnection(personId, type, opportunity, cost, credibilityGain, opens, opensAction) {
+            cost = cost || {};
+            
+            // Deduct resources
+            if (cost.time) gameState.resources.time -= cost.time;
+            if (cost.energy) gameState.resources.energy -= cost.energy;
+            if (credibilityGain) gameState.resources.credibility += credibilityGain;
+            
+            gameState.connections.push(personId);
+            gameState.currentPath.push(personId);
+            gameState.totalInteractions++;
+
+            updateResources();
+            updateProgress();
+            renderNetwork();
+            
+            const person = getPersonByIdAllTypes(personId);
+            showNotification(`Connected with ${person.name}!${credibilityGain ? ` +${credibilityGain} credibility` : ''}`, 'success');
+
+            // Unlock new connections
+            if (opens) {
+                const character = characters[gameState.selectedCharacter];
+                opens.forEach(openId => {
+                    [...character.acquaintances, ...character.bridging].forEach(p => {
+                        if (p.id === openId) p.unlocked = true;
+                    });
+                });
+                renderNetwork();
+            }
+
+            // Check for win condition
+            if (opportunity) {
+                setTimeout(() => {
+                    winGame(opportunity);
+                }, 500);
+            } else {
+                document.getElementById('actionArea').innerHTML = `
+                    <div class="action-prompt">
+                        Connection made with ${person.name}! ${credibilityGain ? `You gained ${credibilityGain} credibility.` : ''} ${opens ? 'This has opened new doors—check for newly available connections.' : 'Continue building your network strategically.'}
+                    </div>
+                `;
+            }
+
+            showStrategyTip();
+        }
+
+        function getPersonByIdAllTypes(id) {
+            const character = characters[gameState.selectedCharacter];
+            const allPeople = [...character.bonding, ...character.acquaintances, ...character.bridging];
+            return allPeople.find(p => p.id === id);
+        }
+
+        function updateProgress() {
+            const character = characters[gameState.selectedCharacter];
+            const shortestPath = Math.min(...character.winPaths.map(path => path.length));
+            const progress = Math.min((gameState.connections.length / (shortestPath + 2)) * 100, 100);
+            gameState.progress = Math.round(progress);
+            
+            document.getElementById('progressBar').style.width = gameState.progress + '%';
+            document.getElementById('progressBar').textContent = gameState.progress + '%';
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            if (type === 'warning') notification.classList.add('warning');
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function winGame(opportunityType) {
+            const character = characters[gameState.selectedCharacter];
+            const startingTime = character.startingResources.time;
+            const timeSpent = startingTime - gameState.resources.time;
+            
+            document.getElementById('gameBoard').classList.remove('active');
+            document.getElementById('victoryScreen').classList.add('active');
+            
+            let outcomeMessage = character.winMessage;
+            if (opportunityType === 'fellowship') {
+                outcomeMessage = "You secured a prestigious science policy fellowship! This is your bridge out of academia.";
+            } else if (opportunityType === 'consulting-contract') {
+                outcomeMessage = "You landed an independent consulting contract! Your reputation opened doors.";
+            } else if (opportunityType === 'independent-practice') {
+                outcomeMessage = "You built an independent consulting practice! Strategic networking paid off.";
+            }
+            
+            document.getElementById('victoryMessage').textContent = outcomeMessage;
+            document.getElementById('totalConnections').textContent = gameState.connections.length;
+            document.getElementById('timeInvested').textContent = timeSpent;
+            
+            // Calculate efficiency
+            const shortestPath = Math.min(...character.winPaths.map(path => path.length));
+            const efficiency = Math.round((shortestPath / gameState.connections.length) * 100);
+            document.getElementById('pathEfficiency').textContent = efficiency + '%';
+            
+            // Show connection path
+            const pathDiv = document.getElementById('connectionPath');
+            pathDiv.innerHTML = '';
+            
+            pathDiv.appendChild(createPathNode(character.name));
+            
+            gameState.currentPath.forEach(personId => {
+                pathDiv.appendChild(createPathArrow());
+                const person = getPersonByIdAllTypes(personId);
+                pathDiv.appendChild(createPathNode(person.name));
+            });
+
+            // Analysis
+            analyzeJourney();
+        }
+
+        function analyzeJourney() {
+            const character = characters[gameState.selectedCharacter];
+            const whatWorked = document.getElementById('whatWorked');
+            const keyInsights = document.getElementById('keyInsights');
+
+            // Determine what worked
+            let workingStrategy = '';
+            if (gameState.resources.credibility >= 6) {
+                workingStrategy = 'You invested in building credibility through courses, portfolios, or thought leadership. This made high-value connections willing to take a chance on you.';
+            } else if (gameState.connections.length <= 6) {
+                workingStrategy = 'You were strategic and efficient, focusing on quality connections rather than quantity. You found a short path to your goal.';
+            } else {
+                workingStrategy = 'You explored multiple paths and eventually found one that worked. Persistence paid off.';
+            }
+            whatWorked.textContent = workingStrategy;
+
+            // Key insights
+            const insights = [
+                'Weak ties (acquaintances) gave you access to completely different networks than your close friends',
+                'Strategic investment (time, energy, credibility-building) was necessary to unlock high-value connections',
+                'Career transitions rarely happen through one connection—they require building a pathway of 3-5 bridges',
+                'Not every connection led directly to your goal, but each one expanded your network and possibilities',
+                'Your existing experience/credentials had value, but you needed to translate them for a new audience'
+            ];
+
+            keyInsights.innerHTML = '';
+            insights.forEach(insight => {
+                const li = document.createElement('li');
+                li.textContent = insight;
+                keyInsights.appendChild(li);
+            });
+        }
+
+        function createPathNode(name) {
+            const node = document.createElement('div');
+            node.className = 'path-node';
+            node.textContent = name;
+            return node;
+        }
+
+        function createPathArrow() {
+            const arrow = document.createElement('div');
+            arrow.className = 'path-arrow';
+            arrow.textContent = '→';
+            return arrow;
+        }
+    </script>
+</body>
+</html>
